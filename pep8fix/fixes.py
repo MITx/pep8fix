@@ -26,9 +26,13 @@ e226 = e225
 
 
 def e231(line, cursor):
-    """fixes missing white space after ','"""
-    tokens = re.split(",(\S)", line)
-    return "".join(", ".join(tokens[i:i + 2]) for i in range(0, len(tokens), 2))
+    """fixes missing white space after character"""
+    return line[:cursor + 1] + " " + line[cursor + 1:]
+
+
+def e251(line, cursor):
+    """Removes spaces around keyword/parameter equals"""
+    return line[:cursor - 1].rstrip() + line[cursor - 1] + line[cursor:].lstrip()
 
 
 def e261(line, cursor):

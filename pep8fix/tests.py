@@ -116,6 +116,7 @@ class TestMissingWhitespace(Pep8FixTester):
     def test_e231(self):
         yield self.ask, "['a','b']"
         yield self.ask, "foo(bar,baz)"
+        yield self.ask, "{foo:bar}"
 
 
 class TestWhiteSpaceBeforeInlineComment(Pep8FixTester):
