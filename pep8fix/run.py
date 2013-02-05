@@ -77,15 +77,19 @@ def correct_file(filename, errors):
             except KeyError:
                 yield line
             else:
-                print error
-                print repr(line)
                 # Can we fix it?
                 try:
+                    original = line
                     line = error.correct(line)
+                    print error
+                    if original.endswith('\n'):
+                        print '-%s' % original,
+                    else:
+                        print '-%s\n\\ No newline at end of file' % original
+                    for ln in line.split('\n')[:-1]:
+                        print '+%s' % ln
                 except ValueError:
-                    print "No known solution."
-                else:
-                    print repr(line)
+                    print "%s: No known solution." % error
                 yield line
 
 
