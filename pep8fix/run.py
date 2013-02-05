@@ -18,9 +18,10 @@ class Error(object):
 
     def correct(self, line):
         """Correct the mistake on the line."""
-        try:
-            return getattr(fixes, self.code.lower())(line, self.cursor)
-        except AttributeError:
+        code_fn = self.code.lower()
+        if hasattr(fixes, code_fn):
+            return getattr(fixes, code_fn)(line, self.cursor)
+        else:
             raise ValueError("No solution known.")
 
     def __str__(self):
@@ -36,8 +37,9 @@ def parse_location(location):
     filename, line, cursor = tokens[0], int(tokens[1]), None
 
     # not all errors contain a cursor
+    # Those that do have a cursor that is 1 indexed
     try:
-        cursor = int(tokens[2])
+        cursor = int(tokens[2]) - 1
     except ValueError:
         pass
     return filename, line, cursor

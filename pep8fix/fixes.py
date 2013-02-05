@@ -4,15 +4,25 @@ import tokenize
 
 import pep8
 
-def _iden(x):
-    yield x
 
+def e201(line, cursor):
+    """Fixes whitespace after character"""
+    # Cursor points to the character
+    return ''.join([line[:cursor], line[cursor:].lstrip()])
+
+
+def e203(line, cursor):
+    """Removes whitespace before character"""
+    # Cursor points to the whitespace, not the character
+    return ''.join([line[:cursor].rstrip(), line[cursor:].lstrip()])
+
+e202 = e203
 
 def e225(line, cursor):
     """fixes missing whitespace around operator."""
-    # iterate through operators in reverse length order
-    tokens = tokenize.generate_tokens(_iden(line).next)
-    return ' '.join(token for _, token, _, _, _ in tokens)
+    return ' '.join([line[:cursor], line[cursor:]])
+
+e226 = e225
 
 
 def e231(line, cursor):
@@ -43,6 +53,11 @@ def e303(line):
     return ""
 '''
 
+def e401(line, cursor):
+    """Fixes multiple imports on a single line"""
+    imports = line.strip()[len('import '):].split(',')
+    return "\n".join("import " + _import.strip() for _import in imports)
+
 
 '''
 def e701(line):
@@ -62,9 +77,20 @@ def w291(line, cursor):
     return line.rstrip() + "\n"
 
 
+def w292(line, cursor):
+    """Fixes missing blank line at the end of the file"""
+    return line + "\n"
+
+
 def w293(line, cursor):
     """fixes blank line contains whitespace."""
     return "\n"
+
+
+def w391(line, cursor):
+    """Removes blank lines at the ends of files"""
+    return ''
+
 
 
 if __name__ == "__main__":
